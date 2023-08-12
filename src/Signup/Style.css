@@ -94,3 +94,15 @@ button{
 .link{
     color: orange;
 }
+.error{
+    color: red;
+    margin-top: 5px;
+    font-size: 14px;
+    margin-left: 5px;
+}
+.row{
+    display: flex;
+    align-items: center;}
+.required{
+    color: red;
+}
