@@ -1,10 +1,6 @@
 import React, { useRef, useState } from "react";
 import './Style.css';
 import profile from '../images/profile.png';
-import email from '../images/email.jpg';
-import namee from '../images/name.png';
-import password from '../images/pass.png';
-import mobile from '../images/mobile.png';
 import pic from '../images/pic.png';
 import axios from "axios";
 import * as Yup from 'yup';
@@ -28,22 +24,10 @@ const Signup = () => {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
         console.log(file);
-        // setState((prevState) => ({
-        //     ...prevState,
-        //     photo: e.target.files[0]
-        // }));
         setPhoto(e.target.files[0]);
         console.log(photo);
 
     };
-    // const handleChange = (event) => {
-    //     const { id, value } = event.target;
-    //     setState((prevState) => ({
-    //         ...prevState,
-    //         [id]: value
-    //     }));
-    //     // setState(event.target.value);
-    // };
     const validationSchema = Yup.object().shape({
         fullName: Yup.string()
         .required('Name is required'),
@@ -105,21 +89,24 @@ const Signup = () => {
 
 
     const sendDetailsToServer = () => {
-        const url = 'http://localhost/signupReact/signup.php';
+        const url = 'http://localhost/form-xlab/signup.php';
         let fData = new FormData();
-        console.log(photo);
-        fData.append('photo', photo);
+        // console.log(photo);
+        // fData.append('photo', photo);
         fData.append('fullName', state.fullName);
         fData.append('mobile', state.mobile);
         fData.append('email', state.email);
         fData.append('password', state.password);
+        const imagePath = `images/${photo.name}`;
+       fData.append('imagePath', imagePath); 
+
         axios.post(url, fData).then(
             response => alert(response.data)
         ).catch(error => alert(error));
 
         setState((prevState) => ({
             ...prevState,
-            successMessage: "Signup successful!"
+            successMessage: "Signup successfull !"
         }));
     
         // Refresh the page after a delay
@@ -150,7 +137,9 @@ const Signup = () => {
                                 )}
                             </div>
                             <div >
-                                <img src={namee} alt="name" className="icon" />
+                                <div className="icon">
+                                <span class="material-icons-outlined">person</span>
+                                </div>
                                 <input type="text" id="name" value={state.fullName}
                                     onChange={(e) => setState((prevState) => ({
                                         ...prevState,
@@ -164,7 +153,9 @@ const Signup = () => {
                                 )}
                             </div>
                             <div>
-                                <img src={mobile} alt="email" className="icon" />
+                                <div className="icon">
+                                <span class="material-icons-outlined">call</span>
+                                </div>
                                 <input type="text" id="mobile" value={state.mobile}
                                     onChange={(e) => setState((prevState) => ({
                                         ...prevState,
@@ -179,7 +170,9 @@ const Signup = () => {
                                 )}
                             </div>
                             <div>
-                                <img src={email} alt="email" className="icon" />
+                                <div className="icon">
+                                <span class="material-icons-outlined">email</span>
+                                </div>
                                 <input type="text" id="email" value={state.email}
                                     onChange={(e) => setState((prevState) => ({
                                         ...prevState,
@@ -194,7 +187,9 @@ const Signup = () => {
                                 )}
                             </div>
                             <div>
-                                <img src={password} alt="email" className="icon" />
+                                <div className="icon">
+                                <span class="material-icons-outlined" >lock</span>
+                                </div>
                                 <input type="password" id="password" value={state.password}
                                     onChange={(e) => setState((prevState) => ({
                                         ...prevState,
@@ -209,7 +204,9 @@ const Signup = () => {
                                 )}
                             </div>
                             <div>
-                                <img src={password} alt="email" className="icon" />
+                                <div className="icon">
+                                <span class="material-icons-outlined">lock</span>
+                                </div>
                                 <input type="password" id="confirmPassword" value={state.confirmPassword}
                                     onChange={(e) => setState((prevState) => ({
                                         ...prevState,
@@ -217,7 +214,6 @@ const Signup = () => {
                                     }))} />
                             </div>
 
-                            {/* <button type="submit" onClick={handleSubmitClick}>SIGNUP</button> */}
                             <button
                                 type="submit"
                                 className="btn btn-primary"

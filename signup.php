@@ -24,10 +24,10 @@ if (mysqli_connect_error()) {
     $email = $_POST["email"];
     $pasword = $_POST["password"];
     $enc_pwd = md5($pasword);
-
+    $imagePath=$_POST['imagePath'];
     // Validation
     $errors = array();
-    $emailErr="";
+    // $emailErr="";
     
     // Mobile validation
     if (!preg_match("/^[0-9]{11}$/", $mobile)) {
@@ -59,7 +59,7 @@ if (mysqli_connect_error()) {
     }
 
     if (empty($errors)) {
-        $sql = "INSERT INTO user(fullName,mobile,email,password) VALUE( '$fullName','$mobile','$email','$enc_pwd'); ";
+        $sql = "INSERT INTO user(profileImg,fullName,mobile,email,password) VALUE( '$imagePath','$fullName','$mobile','$email','$enc_pwd'); ";
         $res = mysqli_query($conn, $sql);
         if ($res) {
             echo "Success!";
