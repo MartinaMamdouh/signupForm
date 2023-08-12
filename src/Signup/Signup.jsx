@@ -7,7 +7,7 @@ import * as Yup from 'yup';
 
 const Signup = () => {
     const [state, setState] = useState({
-        photo: "",
+        // photo: "",
         fullName: "",
         mobile: "",
         email: "",
@@ -16,6 +16,7 @@ const Signup = () => {
         successMessage: null
     });
     const [photo, setPhoto] = useState("");
+    const [emailExistsError, setEmailExistsError] = useState(false);
 
     const inputRef = useRef(null);
     const handleImageClick = () => {
@@ -30,7 +31,7 @@ const Signup = () => {
     };
     const validationSchema = Yup.object().shape({
         fullName: Yup.string()
-        .required('Name is required'),
+            .required('Name is required'),
         mobile: Yup.string()
             .matches(/^[0-9]{11}$/, 'Invalid mobile number')
             .required(' Mobile number is required')
@@ -69,11 +70,8 @@ const Signup = () => {
         validationSchema
             .validate(state, { abortEarly: false })
             .then(() => {
-                if (state.password === state.confirmPassword) {
-                    sendDetailsToServer();
-                } else {
-                    alert("Passwords do not match");
-                }
+                sendDetailsToServer();
+                // checkEmailExists();
             })
             .catch((errors) => {
                 const validationErrors = {};
@@ -87,28 +85,45 @@ const Signup = () => {
             });
     };
 
-
+    const checkEmailExists = () => {
+        const url = 'http://localhost/form-xlab/signup.php';
+        const email = state.email;
+        axios.post(url, { email })
+            .then((response) => {
+                if (response.data.message === "Email already exists") {
+                    setEmailExistsError(true);
+                } else {
+                    sendDetailsToServer();
+                }
+            })
+            .catch((error) => {
+                alert('Error checking email existence');
+                console.log(error);
+            });
+    }
     const sendDetailsToServer = () => {
+        // setEmailExistsError(false);
         const url = 'http://localhost/form-xlab/signup.php';
         let fData = new FormData();
-        // console.log(photo);
-        // fData.append('photo', photo);
         fData.append('fullName', state.fullName);
         fData.append('mobile', state.mobile);
         fData.append('email', state.email);
         fData.append('password', state.password);
         const imagePath = `images/${photo.name}`;
-       fData.append('imagePath', imagePath); 
+        fData.append('imagePath', imagePath);
 
         axios.post(url, fData).then(
-            response => alert(response.data)
+            response => {
+                alert(response.data);
+
+            }
         ).catch(error => alert(error));
 
         setState((prevState) => ({
             ...prevState,
             successMessage: "Signup successfull !"
         }));
-    
+
         // Refresh the page after a delay
         setTimeout(() => {
             window.location.reload();
@@ -123,103 +138,97 @@ const Signup = () => {
                             <div className="container-image" >
                                 {photo ? (<img src={URL.createObjectURL(photo)} alt="profile" className="profile" />
                                 ) : (<img src={profile} alt="profile" className="profile" />)}
-
-                                <input type="file" ref={inputRef} onChange={handleImageChange} style={{ display: "none" }} />
                             </div>
+                            <input type="file" ref={inputRef} onChange={handleImageChange} style={{ display: "none" }} />
                             <p className="uploadimg">Upload image</p>
                         </div>
 
                         <form className="subContainer">
-                        <div className="row">
+
                             <label htmlFor="name">Full Name <span className="required">*</span> </label>
-                            {state.errors && state.errors.fullName && (
-                                    <p className="error">{state.errors.fullName}</p>
-                                )}
-                            </div>
                             <div >
                                 <div className="icon">
-                                <span class="material-icons-outlined">person</span>
+                                    <span class="material-icons-outlined">person</span>
                                 </div>
                                 <input type="text" id="name" value={state.fullName}
                                     onChange={(e) => setState((prevState) => ({
                                         ...prevState,
                                         fullName: e.target.value
                                     }))} />
-                            </div>
-                            <div className="row">
-                                <label htmlFor="name"> Mobile Number <span className="required">*</span> </label>
-                                {state.errors && state.errors.mobile && (
-                                    <p className="error">{state.errors.mobile}</p>
+                                {state.errors && state.errors.fullName && (
+                                    <p className="error">{state.errors.fullName}</p>
                                 )}
                             </div>
+
+                            <label htmlFor="name"> Mobile Number <span className="required">*</span> </label>
                             <div>
                                 <div className="icon">
-                                <span class="material-icons-outlined">call</span>
+                                    <span class="material-icons-outlined">call</span>
                                 </div>
                                 <input type="text" id="mobile" value={state.mobile}
                                     onChange={(e) => setState((prevState) => ({
                                         ...prevState,
                                         mobile: e.target.value
                                     }))} />
-
-                            </div>
-                            <div className="row">
-                                <label htmlFor="name"> Email <span className="required">*</span></label>
-                                {state.errors && state.errors.email && (
-                                    <p className="error">{state.errors.email}</p>
+                                {state.errors && state.errors.mobile && (
+                                    <p className="error">{state.errors.mobile}</p>
                                 )}
                             </div>
+
+                            <label htmlFor="name"> Email <span className="required">*</span></label>
                             <div>
                                 <div className="icon">
-                                <span class="material-icons-outlined">email</span>
+                                    <span class="material-icons-outlined">email</span>
                                 </div>
                                 <input type="text" id="email" value={state.email}
                                     onChange={(e) => setState((prevState) => ({
                                         ...prevState,
                                         email: e.target.value
                                     }))} />
-
-                            </div>
-                            <div className="row">
-                                <label htmlFor="name"> Password <span className="required">*</span></label>
-                                {state.errors && state.errors.password && (
-                                    <p className="error">{state.errors.password}</p>
+                                {state.errors && state.errors.email && (
+                                    <p className="error">{state.errors.email}</p>
+                                )}
+                                {emailExistsError && (
+                                    <p className="error">Email already exists</p>
                                 )}
                             </div>
+
+                            <label htmlFor="name"> Password <span className="required">*</span></label>
                             <div>
                                 <div className="icon">
-                                <span class="material-icons-outlined" >lock</span>
+                                    <span class="material-icons-outlined" >lock</span>
                                 </div>
                                 <input type="password" id="password" value={state.password}
                                     onChange={(e) => setState((prevState) => ({
                                         ...prevState,
                                         password: e.target.value
                                     }))} />
-
-                            </div>
-                            <div className="row">
-                                <label htmlFor="name"> Confirm Password <span className="required">*</span></label>
-                                {state.errors && state.errors.confirmPassword && (
-                                    <p className="error">{state.errors.confirmPassword}</p>
+                                {state.errors && state.errors.password && (
+                                    <p className="error">{state.errors.password}</p>
                                 )}
                             </div>
+
+                            <label htmlFor="name"> Confirm Password <span className="required">*</span></label>
                             <div>
                                 <div className="icon">
-                                <span class="material-icons-outlined">lock</span>
+                                    <span class="material-icons-outlined">lock</span>
                                 </div>
                                 <input type="password" id="confirmPassword" value={state.confirmPassword}
                                     onChange={(e) => setState((prevState) => ({
                                         ...prevState,
                                         confirmPassword: e.target.value
                                     }))} />
+                                {state.errors && state.errors.confirmPassword && (
+                                    <p className="error">{state.errors.confirmPassword}</p>
+                                )}
                             </div>
 
                             <button
                                 type="submit"
                                 className="btn btn-primary"
                                 onClick={handleSubmitClick}
-
                             > SIGN UP </button>
+
                         </form>
                         <p >
                             Already have an account ?<a href="#" className="link">Login</a>

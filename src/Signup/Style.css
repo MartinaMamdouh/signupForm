@@ -48,13 +48,13 @@
 input{
     width: 250px;
     height: 40px;
-    border-radius: 60px;
+    border-radius: 20px;
     box-shadow: inset 0px 0px 25px 0px #888;
     border: none;
     outline: none;
     background-color: #fff;
     margin-bottom: 5px;
-    padding: 10;
+    /* padding: 10; */
     padding: 0px 10px 10px 60px; 
     /* text-align: right; */
 }
@@ -77,7 +77,7 @@ label{
 button{
     width: 320px;
     height: 45px;
-    border-radius: 60px;
+    border-radius: 20px;
     background-color: rgb(10, 10, 78);
     color: white;
     font-size: 25px;
@@ -96,13 +96,14 @@ button{
 }
 .error{
     color: red;
-    margin-top: 5px;
+    /* margin-top: 5px; */
+    margin: 0;
+    margin-bottom: 10px;
     font-size: 14px;
-    margin-left: 5px;
+    text-align: start;
+    /* margin-left: 5px; */
 }
-.row{
-    display: flex;
-    align-items: center;}
+
 .required{
     color: red;
 }
