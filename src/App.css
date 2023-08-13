@@ -1,6 +1,6 @@
-.App {
+/* .App {
   text-align: center;
-}
+} */
 
 .App-logo {
   height: 40vmin;
@@ -35,4 +35,31 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.imgs {
+  padding-top: 20px;
+  justify-content: start;
+  display: flex;
+  flex-direction: column;
+}
+
+.container-image {
+  background-color: rgb(223, 221, 221);
+  border-radius: 150px;
+  align-items:center;
+  display: flex;
+  justify-content: center;
+  height: 115px;
+  width: 115px;
+  /* margin-bottom: 10px; */
+}
+
+.colorOrange{
+  color: orange;
+}
+.profile {
+  height: 100px;
+  width: 100px;
+  border-radius: 130px;
 }

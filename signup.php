@@ -63,19 +63,13 @@ if (mysqli_connect_error()) {
     if (empty($errors)) {
         if (checkEmailExists($conn, $email)) {
             echo "Email already exists";
-            // $response=array("message"=>"Email already exists");
-            // echo json_encode($response);
         } else {
         $sql = "INSERT INTO user(profileImg,fullName,mobile,email,password) VALUE( '$imagePath','$fullName','$mobile','$email','$enc_pwd'); ";
         $res = mysqli_query($conn, $sql);
         if ($res) {
             echo "Success!";
-            // $response=array("message"=>"success!");
-            // echo json_encode($response);
         } else {
             echo "Error!";
-            // $response=array("message"=>"error!");
-            // echo json_encode($response);
         }
     }
     } else {
